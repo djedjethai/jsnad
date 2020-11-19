@@ -1,5 +1,23 @@
 const assert = require('assert')
 
+const leopard = {
+	hiss: function() {console.log(this.name + ' hsss')}
+}
+
+const lynx = Object.create(leopard, {
+	purr: {value: function() {console.log(this.name + ' prrr')}}
+})
+
+const cat = Object.create(lynx, {
+	meow: {value: function() {console.log(this.name + ' meow')}}
+})
+
+function createCat(nm) {
+	return Object.create(cat, {
+		name: {value: nm + " the cat"}
+	})
+}
+
 // TODO: 
 // implement a way to create a prototype chain
 // of leopard -> lynx -> cat
@@ -7,7 +25,7 @@ const assert = require('assert')
 // lynx prototype must have ONLY a purr method
 // cat prototype must have ONLY a meow method
 
-const felix = null //TODO replace null with instantiation of a cat
+const felix = createCat('Felix') //TODO replace null with instantiation of a cat
 felix.meow() // prints Felix the cat: meow
 felix.purr() // prints Felix the cat: prrr
 felix.hiss() // prints Felix the cat: hsss
