@@ -1,19 +1,18 @@
-const leopard = {
-	hiss: function() {console.log(this.name + ' hsss')}
+const wolf = (name) => {
+	const howl = () => console.log(name + " aaaooouuu") 
+	return {howl}
 }
 
-const lynx = Object.create(leopard, {
-	purr: {value: function() {console.log(this.name + ' prrr')}}
-})
+const dog = (name) => {
+	name = name + " the dog" 
+	const woof = () => console.log(name + " woooffff")
+	return {
+		...wolf(name),
+		woof
+	}
+}
 
-const cat = Object.create(lynx, {
-	meow: {value: function() {console.log(this.name + ' meow')}}
-})
+const p = dog('pierre')
 
-const felix = Object.create(cat, {
-	name: {value: "Felix the cat"}
-})
-
-felix.hiss()
-felix.purr()
-felix.meow()
+p.woof()
+p.howl()
