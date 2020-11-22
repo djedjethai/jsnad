@@ -1,18 +1,5 @@
-const wolf = (name) => {
-	const howl = () => console.log(name + " aaaooouuu") 
-	return {howl}
-}
+const ex = require('./toImport')
 
-const dog = (name) => {
-	name = name + " the dog" 
-	const woof = () => console.log(name + " woooffff")
-	return {
-		...wolf(name),
-		woof
-	}
-}
+ex.tom()
 
-const p = dog('pierre')
 
-p.woof()
-p.howl()
