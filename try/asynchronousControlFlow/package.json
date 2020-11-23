@@ -1,0 +1,15 @@
+{
+  "name": "asynchronouscontrolflow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "concatAsyncFlow.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node callBack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastseries": "^2.0.0"
+  }
+}
