@@ -21,3 +21,14 @@ const opC = (cb) => {
   }, 125)
 }
 
+async function run() {
+	const a =  opA(print)
+	const b =  opB(print)
+	const c =  opC(print)
+
+	await c
+	await b
+	await a
+}
+
+run()

@@ -23,3 +23,13 @@ const opC = (cb) => {
     cb(null, 'C')
   }, 125)
 }
+
+
+const fof = promisify(cb => {
+	const a = opA(print)	
+	const b = opB(print)	
+	const c = opC(print)	
+		
+})
+
+fof()

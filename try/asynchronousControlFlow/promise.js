@@ -1,3 +1,27 @@
+const { readFile } = require('fs').promises
+
+const files = Array.from(Array(3)).fill(__filename)
+
+let index = 0
+const data = []
+const lg = files.length
+const r = function read(file) {
+	readFile(file, (err, contents) => {
+		if(err) print(err)
+		index++
+		data.push(contents)
+		if(index < lg) return read(files[index])
+		return data
+	}) 
+}
+
+r(files[index]).then(d => console.log(Buffer.concat(d).toString())).catch(console.error)
+
+
+
+
+
+
 // normal call back
 // function asyncOperation(cb) {
 // 	doSomethingAsync ((err, value) => {
@@ -75,24 +99,24 @@
 // 	.catch(err => console.error(err))
 
 // using Promise.allSettled, to still render in case some Promise fail
-const files = [__filename, "not a file", __filename] 
-const { readFile } = require('fs').promises
-
-const print = res => {
-	res
-		.filter(({status}) => status === 'rejected')
-		.forEach(({reason}) => console.error(reason))
-	const data = res
-		.filter(({status}) => status === 'fulfilled')
-		.map(({value}) => value)
-	const contents = Buffer.concat(data)
-	console.log(contents.toString())
-}
-
-const readers = files.map(file => readFile(file))
-Promise.allSettled(readers)
-	.then(print)
-	.catch(console.error)
+// const files = [__filename, "not a file", __filename] 
+// const { readFile } = require('fs').promises
+// 
+// const print = res => {
+// 	res
+// 		.filter(({status}) => status === 'rejected')
+// 		.forEach(({reason}) => console.error(reason))
+// 	const data = res
+// 		.filter(({status}) => status === 'fulfilled')
+// 		.map(({value}) => value)
+// 	const contents = Buffer.concat(data)
+// 	console.log(contents.toString())
+// }
+// 
+// const readers = files.map(file => readFile(file))
+// Promise.allSettled(readers)
+// 	.then(print)
+// 	.catch(console.error)
 
 // Finally, if we want promises to run in parallel independently 
 //we can either use Promise.anySettled or simple execute each of them with their own then and catch handlers:

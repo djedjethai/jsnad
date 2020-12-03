@@ -1,21 +1,3 @@
-const { readFile } = require('fs').promises
-// const { promisify } = require('util')
-
-const files = Array.from(Array(4)).fill(__filename)
-// const files = [__filename, "an errorrrr", __filename]
-
-const data = []
-
-async function run() {
-
-	const readed = files.map(file => readFile(file))
-	const dt = await Promise.all(readed)
-	console.log(Buffer.concat(dt).toString())
-}
-
-run().catch(console.error)
-
-
 // const { readFile } = require('fs')
 // 
 // const arr1 = []
