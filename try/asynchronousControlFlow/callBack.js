@@ -1,3 +1,62 @@
+const { promisify } = require('util')
+const series = require('fastseries')()
+
+
+const print = (err, contents) => { 
+  if (err) console.error(err)
+  else console.log(contents) 
+}
+
+const opA = (cb) => {
+  setTimeout(() => {
+    cb(null, 'A')
+  }, 500)
+}
+
+const opB = (cb) => {
+  setTimeout(() => {
+    cb(null, 'B')
+  }, 250)
+}
+
+const opC = (cb) => {
+  setTimeout(() => {
+    cb(null, 'C')
+  }, 125)
+}
+
+
+const arr = [opA, opB, opC]
+
+
+// let i = 0
+// const data = []
+// const lg = arr.length
+// 
+// function run(i) {
+// 	arr[i]((e, d) => {
+// 		i++
+// 		if(e) print(e)
+// 		else {
+// 			print(null, d)
+// 		}
+// 		if(i < lg) run(i)
+// 	})
+// } 
+// run(i)
+
+
+// const read = arr.map(ar => {
+// 	return (_, cb) => {
+// 		ar((e, d) => {
+// 			if(e) cb(e)
+// 			cb(null, d)
+// 		})
+// 	} 
+// })
+// series(null, read, null, print)
+
+
 // const { readFile } = require('fs')
 // 
 // const arr1 = []

@@ -1,26 +1,104 @@
-const { readFile } = require('fs').promises
+const { promisify } = require('util')
 
-const files = Array.from(Array(3)).fill(__filename)
 
-let index = 0
-const data = []
-const lg = files.length
-const r = function read(file) {
-	readFile(file, (err, contents) => {
-		if(err) print(err)
-		index++
-		data.push(contents)
-		if(index < lg) return read(files[index])
-		return data
-	}) 
+const print = (err, contents) => { 
+  if (err) console.error(err)
+  else console.log(contents) 
 }
 
-r(files[index]).then(d => console.log(Buffer.concat(d).toString())).catch(console.error)
+const opA = (cb) => {
+  setTimeout(() => {
+    cb(null, 'A')
+  }, 500)
+}
+
+const opB = (cb) => {
+  setTimeout(() => {
+    cb(null, 'B')
+  }, 250)
+}
+
+const opC = (cb) => {
+  setTimeout(() => {
+    cb(null, 'C')
+  }, 125)
+}
+
+
+const arr = [opA, opB, opC]
+
+const a = promisify(opA)
+const b = promisify(opB)
+const c = promisify(opC)
+
+function re(x) {
+	return x((e, d) => {		
+		print(null, d)
+	})
+}
+
+re(a).then(r => {
+		// console.log(r)
+		// print(null, r)
+		// return re(b)
+	})
+
+
+// ok
+// function read(x) {
+// 	return new Promise((resolve, reject) => {
+// 		x((e,d) => {
+// 			if(e) reject({e, d:null})
+// 			resolve({e:null, d})
+// 		})
+// 	})
+// } 
+// read(opA).then(r => {
+// 		print(r.e, r.d)
+// 		return read(opB)
+// 	})
+// 	.then(r => {
+// 		print(r.e, r.d)
+// 	})
+// 
+
+// function read(x) {
+// 	return new Promise((resolve, reject) => {
+// 		x((e,d) => {
+// 			if(e) reject(print(e))
+// 			resolve(print(null, d))
+// 		})
+// 	})
+// }
+// read(opA) 
+// async function as() {
+// 	await read(opA)
+// 	await read(opB)
+// 	await read(opC)
+// }
+// 
+// as()
 
 
 
-
-
+// const { readFile } = require('fs').promises
+// 
+// const files = Array.from(Array(3)).fill(__filename)
+// 
+// let index = 0
+// const data = []
+// const lg = files.length
+// const r = function read(file) {
+// 	readFile(file, (err, contents) => {
+// 		if(err) print(err)
+// 		index++
+// 		data.push(contents)
+// 		if(index < lg) return read(files[index])
+// 		return data
+// 	}) 
+// }
+// 
+// r(files[index]).then(d => console.log(Buffer.concat(d).toString())).catch(console.error)
 
 // normal call back
 // function asyncOperation(cb) {

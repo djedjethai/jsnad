@@ -29,9 +29,43 @@ const c = promisify(opC)
 
 a.then(print)
 
+// ok
+// function read(x) {
+// 	return new Promise((resolve, reject) => {
+// 		x((e,d) => {
+// 			if(e) reject({e, d:null})
+// 			resolve({e:null, d})
+// 		})
+// 	})
+// } 
+// read(opA).then(r => {
+// 		print(r.e, r.d)
+// 		return read(opB)
+// 	})
+// 	.then(r => {
+// 		print(r.e, r.d)
+// 	})
+// 
+
+// function read(x) {
+// 	return new Promise((resolve, reject) => {
+// 		x((e,d) => {
+// 			if(e) reject(print(e))
+// 			resolve(print(null, d))
+// 		})
+// 	})
+// }
+// read(opA) 
+// async function as() {
+// 	await read(opA)
+// 	await read(opB)
+// 	await read(opC)
+// }
+// 
+// as()
 
 
-
+// that work as well but as the above code works there is not point to promisify (with util).....
 // function test(x) {
 // 	return new Promise((resolve, reject) => {
 // 		x((e,d) => {
@@ -48,7 +82,7 @@ a.then(print)
 // ok()
 
 
-
+// same here, no point to promisify (with util)....
 // function test(x) {
 // 	return new Promise((resolve, reject) => {
 // 		x((e,d) => {
