@@ -3,11 +3,10 @@ const assert = require('assert')
 const { EventEmitter } = require('events')
 
 const ee = new EventEmitter()
-let count = 0
-setInterval(() => {
-  ee.emit('tick')
-}, 100)
 
+
+
+let count = 0
 function listener () {
   count++
   setTimeout(() => {
@@ -16,6 +15,12 @@ function listener () {
     console.log('passed!')
   }, 250)
 }
+
+ee.once('tick', listener)
+
+setInterval(() => {
+  ee.emit('tick')
+}, 100)
 
 
 
