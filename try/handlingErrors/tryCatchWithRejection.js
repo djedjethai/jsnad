@@ -40,17 +40,3 @@ toDo('j')
 	.then(d => console.log(d))
 	.catch(e => console.log(e.code))
 
-
-
-// try {
-// 	setTimeout(() => {
-// 		toDo('j')
-// 			.then(d => console.log(d))
-// 			.catch(e => { throw Error(e) })
-// 	}, 200) 
-// }               
-// catch(e) {      
-// 	console.og(e.code)
-// }               
-                
-                

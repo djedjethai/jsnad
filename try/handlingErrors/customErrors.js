@@ -19,6 +19,9 @@
 // 	get name() { return 'OddError' }
 // }
 // use our custom Error class with the previous ex
+
+
+// we are here
 function testEwithBetterErrors(n) {
 	if (typeof n !== 'number') throw new TypeError('this is not a number')
 	if (n < 0) throw new RangeError('negatif number are not allow')

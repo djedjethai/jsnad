@@ -70,7 +70,7 @@ re(a).then(r => {
 // 		})
 // 	})
 // }
-// read(opA) 
+//
 // async function as() {
 // 	await read(opA)
 // 	await read(opB)
@@ -78,8 +78,6 @@ re(a).then(r => {
 // }
 // 
 // as()
-
-
 
 // const { readFile } = require('fs').promises
 // 
