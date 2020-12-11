@@ -13,7 +13,9 @@ class OddErr extends Error {
 	}
 }
 
-// using async/await a REVOIR for include the setTimeout inside......
+// in the case this func is not async the err propagation is not handle by run()
+// but the the toDo() render(the res) asynchronously without any err
+// (which is normal as we run() do not re-throw it)
 // async function toDo(n) {
 // 		if(typeof n !== 'number') {
 // 			throw utilErr(
@@ -30,15 +32,22 @@ class OddErr extends Error {
 // 		if(n % 2 !== 0) {
 // 			throw new OddErr('amount')
 // 		}
-// 		// const res = await setTimeout(() => {
-// 		// 	return 	786
-// 		// }, 200)
-// 		const e = new Error('tesssts throw...')
-// 		e.code = 'TEST_ERR'
-// 		throw e
-// 		return n / 2
+// 		
+// 		// similate an unknow err
+// 		throw Error('some other err')
+// 		
+// 		// instead of some fetch() which return a Promise
+// 		// to simulate an sync process with setTimeout(), we must create manually the promise. 
+// 		const res = new Promise((resolve, reject) => {
+// 			setTimeout(() => {
+// 		 		resolve(n / 2)
+// 			}, 200)
+// 		})
+// 		
+// 		return res
 // }
-// 
+// // this run func handle some err and throw the others
+// // toDo() MUST BE ASYNC for run to be able to re-throw the err
 // async function run(n) {
 // 	try {
 // 		const result = await toDo(n) 
@@ -46,12 +55,27 @@ class OddErr extends Error {
 // 	}
 // 	catch(e) {
 // 		// re-throw the err which has been throw from toDo() func
-// 		throw(e)
+// 		if(e.code === 'MUST_NUMBER') {
+// 			throw Error('wrong type')
+// 		}
+// 		else if(e.code === 'MUST_POSITIF') {
+// 			throw Error('out of range')
+// 		}
+// 		else if(e.code === 'MUST_BE_EVEN') {
+// 			throw Error('must be even')
+// 		}
+// 		else {
+// 			throw e
+// 		}
 // 	}
 // }
-// run(3).catch(e => console.log(e.code))
+// 
+// // try { run(-2) } catch(e) { console.log(e) }
+// 
+// run(3).catch(e => console.error(e))
 
-// propagation of the err by re-throwing the err without async/await
+
+// let propagate the err using sychonous code
 function toDo(n) {
 		if(typeof n !== 'number') {
 			throw utilErr(
@@ -68,12 +92,10 @@ function toDo(n) {
 		if(n % 2 !== 0) {
 			throw new OddErr('amount')
 		}
-		// const res = await setTimeout(() => {
-		// 	return 	786
-		// }, 200)
-		const e = new Error('tesssts throw...')
-		e.code = 'TEST_ERR'
-		throw e
+		
+		// similate an unknow err
+		throw Error('some other err')	
+		
 		return n / 2
 }
 
@@ -84,15 +106,25 @@ function run(n) {
 	}
 	catch(e) {
 		// re-throw the err which has been throw from toDo() func
-		throw(e)
+		if(e.code === 'MUST_NUMBER') {
+			throw Error('wrong type')
+		}
+		else if(e.code === 'MUST_POSITIF') {
+			throw Error('out of range')
+		}
+		else if(e.code === 'MUST_BE_EVEN') {
+			throw Error('must be even')
+		}
+		else {
+			throw e
+		}
 	}
 }
 
-try { run(4) } catch(e) { console.log(e.code) }
+try { run('j') } catch(e) { console.error(e) }
 
-// same same as, but in the previous function, we re-throw the err
-// here we use try/catch without async/await, as we throw err and return result, 
-// so Promise based, and Promise base works with try/catch
-try { toDo(3) } catch(e) { console.log(e.code) }
+
+// run(3).catch(e => console.error(e))
+
 
 

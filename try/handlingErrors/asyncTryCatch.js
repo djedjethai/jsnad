@@ -51,8 +51,9 @@ class OddErr extends Error {
 // we can convert our toDo function from returning a promise where we explicitly call reject within a Promise tether function to simply throwing again.
 
 
-// do not work...... I don t know..... a revoir
-async function toDo(n) {
+// here, as i am not propagating the err via another func (like in propagation.js)
+// i don t need to async toDo(), it works perfectly like it
+function toDo(n) {
 		if(typeof n !== 'number') {
 			throw utilErr(
 				new TypeError('must be a number'),
@@ -68,9 +69,13 @@ async function toDo(n) {
 		if(n % 2 !== 0) {
 			throw new OddErr('amount')
 		}
-		const res = await setTimeout(() => {
-			return 	786
-		}, 200)
+		// must create manually the promise to reproduce an async render of a method (like readFile)
+		const res = new Promise((resolve, reject) => {
+			setTimeout(() => {
+				resolve(n / 2)
+			}, 200)
+
+		})
 		return res
 }
 

@@ -26,8 +26,18 @@ const opC = (cb) => {
 const a = promisify(opA)
 const b = promisify(opB)
 const c = promisify(opC)
-// 
-// a.then(print)
+
+async function as() {
+	try {
+		print(null, await a())
+		print(null, await b())
+		print(null, await c())
+	}
+	catch(e) {
+		print(e)
+	}
+}
+as()
 
 // ok
 // function read(x) {
@@ -47,20 +57,20 @@ const c = promisify(opC)
 // 	})
 // 
 
-function read(x) {
-	return new Promise((resolve, reject) => {
-		x((e,d) => {
-			if(e) reject(print(e))
-			resolve(print(null, d))
-		})
-	})
-}
-async function as() {
-	await read(opA)
-	await read(opB)
-	await read(opC)
-}
-as()
+// function read(x) {
+// 	return new Promise((resolve, reject) => {
+// 		x((e,d) => {
+// 			if(e) reject(print(e))
+// 			resolve(print(null, d))
+// 		})
+// 	})
+// }
+// async function as() {
+// 	await read(opA)
+// 	await read(opB)
+// 	await read(opC)
+// }
+// as()
 
 
 // that work as well but as the above code works there is not point to promisify (with util).....
@@ -105,12 +115,12 @@ as()
 
 
 // no need promise
-opA((err, d) => {
-	print(err, d)
-	opB((e, d) => {
-		print(e, d)
-		opC((e,d) => {
-			print(e, d)
-		})
-	})
-})
+// opA((err, d) => {
+// 	print(err, d)
+// 	opB((e, d) => {
+// 		print(e, d)
+// 		opC((e,d) => {
+// 			print(e, d)
+// 		})
+// 	})
+// })
