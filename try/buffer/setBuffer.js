@@ -111,11 +111,17 @@ jerome@jerome-PORTEGE-M900 ~ $ node -p "Buffer.from('\u{1D400}')"
 // here i tramsfome it into 'string base64 encoding' 
 jerome@jerome-PORTEGE-M900 ~ $ node -p "Buffer.from('\u{1D400}').toString('base64')"
 8J2QgA==
+// let's convert it in 'hex'
+jerome@jerome-PORTEGE-M900 ~/Documents/code/jsnad/try $ node -p "Buffer.from('\u{1D400}').toString('hex')"
+f09d9080
 // here i get the byte data of this A special font encoded base64 
 jerome@jerome-PORTEGE-M900 ~ $ node -p "Buffer.from('8J2QgA==', 'base64')"
 <Buffer f0 9d 90 80>
 // here i get the byte data of the A special font with UTF-8 encoding (see the byte data are same)
 jerome@jerome-PORTEGE-M900 ~ $ node -p "Buffer.from('\u{1D400}')"
+<Buffer f0 9d 90 80>
+// same, from 'hex' encoding
+jerome@jerome-PORTEGE-M900 ~/Documents/code/jsnad/try $ node -p "Buffer.from('f09d9080', 'hex')"
 <Buffer f0 9d 90 80>
 
 
