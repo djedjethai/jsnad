@@ -28,7 +28,7 @@ undefined
 > buf1Hex.toString('utf-8')
 'f09d9080'
 
-// for that i need to recreate one more buffer.
+// for that i need to recreate one more buffer, en precisant son string encodage.
 > var buf1Dec = Buffer.from(buf1Hex, 'hex')
 undefined
 > buf1Dec.toString('utf-8')

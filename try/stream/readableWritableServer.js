@@ -2,7 +2,7 @@
 const net = require('net')
 net.createServer((socket) => {
 	const interval = setInterval(() => {
-		    socket.write('beat')
+		    socket.write('beat\n')
 		  
 	}, 1000)
 	socket.on('data', (data) => {

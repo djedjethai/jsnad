@@ -1,56 +1,55 @@
-// function utilErr(err, code) {
-// 	err.code = code
-// 	return err
-// }
-// 
-// class OddErr extends Error {
-// 	constructor(varname= '') {
-// 		super(varname + ' must be even')
-// 		this.code = 'MUST_BE_EVEN'
-// 	}
-// 	get name() {
-// 		return 'OddErr ['+ this.code + ']'
-// 	}
-// }
-// 
-// 
-// function toDo(n) {
-// 	return new Promise((resolve, reject) => {
-// 		if(typeof n !== 'number') {
-// 			reject(utilErr(
-// 				new TypeError('must be a number'),
-// 				'MUST_NUMBER'
-// 			))
-// 		}
-// 		if(n < 0) {
-// 			reject(utilErr(
-// 				new RangeError('must be positif'),
-// 				'MUST_POSITIF'
-// 			))	
-// 		}
-// 		if(n % 2 !== 0) {
-// 			reject(new OddErr('amount'))
-// 		}
-// 		resolve (n / 2)
-// 	})
-// }
-// 
-// 
-// toDo('j')
-// 	.then(d => console.log(d))
-// 	.catch(e => console.log(e.code))
+class MyErr extends Error {
+	constructor(varname = '') {
+		super(varname+ 'must be even')
+		this.code = 'MUST BE EVEN'
+	}
 
+	get name() {
+		return "myErr"
+	}
+}
 
+const errHelper = (err, code) => {
+	err.code = code
+	return err
+}
 
-// try {
-// 	setTimeout(() => {
-// 		toDo('j')
-// 			.then(d => console.log(d))
-// 			.catch(e => { throw Error(e) })
-// 	}, 200) 
-// }               
-// catch(e) {      
-// 	console.og(e.code)
-// }               
-                
-                
+function testErr(x, cb) {
+		setTimeout(() => {
+			if(typeof x !== 'number') { 
+				cb(errHelper(
+					new TypeError('must be number'),
+					'NUMBER'
+				))
+				return
+			}
+			if(x < 0) { 
+				cb(errHelper(
+					new RangeError('must be positif'),
+					'POSITIF'
+				))
+				return
+			}
+			if(x % 2 !== 0) {
+				cb(errHelper(
+					new MyErr('must be even'), 
+					'EVEN'
+				))
+				return
+			} 
+			cb(null, x / 2)		
+	})	
+}
+
+function toDo(z) {
+	testErr(z, (e, d) => {
+		if(e !== null) {
+			if(e.code === 'NUMBER') console.log('must number')
+			if(e.code === 'POSITIF') console.log('must positif')
+			if(e.code === 'EVEN') console.log('must even')	
+		}
+		console.log(d)
+	})
+}
+// toDo().catch(e => console.log(e))
+toDo(4)
