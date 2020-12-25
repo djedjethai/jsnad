@@ -1,17 +1,27 @@
 const net = require('net')
+const { finished } = require('stream')
 
 const socket = net.connect(3000)
 
-setInterval(() => {
-	socket.write('first connection')
-}, 1000)
+// socket.on('data', data => {
+// 	console.log('retour encoded: ', data)
+// })
 
 socket.pipe(process.stdout)
 
+const interval = setInterval(() => {
+	socket.write('ahhhhhhh')
+}, 1000)
+
 setTimeout(() => {
-	socket.write('finishhh')
-	setTimeout(() => {
-		socket.end('eeennnd')
-	}, 200)
-}, 3250)
+	socket.end('finnnex')
+}, 5200)
+
+finished(socket, err => {
+	clearInterval(interval)
+	if(err) {
+		console.error(err)
+	}
+})
+
 

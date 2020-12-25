@@ -21,11 +21,21 @@ const path = require('path')
 // to the already existing's one
 const contents = fs.readFileSync(__filename, { encoding: 'utf8' })
 fs.writeFileSync(path.join(__dirname, 'out1.txt'), contents.toUpperCase(), {
-	flag: 'a'
+	flags: 'a'
 })
 
 // If there's a problem with an operation the *Sync APIs will throw. So to perform error handling they need to be wrapped in a try/catch:
 
-// change the permission to block any writing (reading..?) opertation on this 'out1.txt' file
-// node -e "fs.chmodSync('out1.txt', 0o666)"
-// DO NOR WORKKKKKK... A VOIR.....
+// change the permission to block any writing opertation on this 'out1.txt' file
+// node -e "fs.chmodSync('todelete.txt', 0o000)"
+try {
+writeFileSync(join(__dirname, 'todelete.txt'), contents.toUpperCase(), {
+	flags:'a'
+})
+} catch(e) {
+	e.code = "niqueee"
+	console.error(e.code) // return niqueee
+}
+
+// then restore the permission
+// node -e "fs.chmodSync('todelete.txt', 0o666)"

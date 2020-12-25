@@ -1,15 +1,13 @@
-'use strict'
-
-const net = require('net')
-const { pipeline,  Transform } = require('stream')
+const { Transform, pipeline, finished } = require('stream')
 const { scrypt } = require('crypto')
+const net = require('net')
 
-const writeScrypt = () => {
+const createTr = () => {
 	return new Transform({
-		decodeStrings:false,
-		encoding:'hex',
+		decodeStrings: false,
+		encoding: 'hex',
 		transform(chunk, enc, next) {
-			scrypt(chunk, 'a-slat', 32, (err, key) => {
+			scrypt(chunk,'a-salt',32, (err, key) => {
 				if(err) {
 					next(err)
 					return
@@ -17,25 +15,25 @@ const writeScrypt = () => {
 				next(null, key)
 			})
 		}
-
-	})
+	}) 
 }
 
 net.createServer(socket => {
-	const tr = writeScrypt()
-
 	socket.on('data', data => {
-		console.log(data.toString())
+		console.log('the data coming to server: ', data)
 	})
 
-	// setInterval(() => {
-	// 	socket.write('olla')
-	// }, 1000)
+	const tr = createTr()
 
-	pipeline(socket, tr, socket, (err) => {
+	pipeline(socket, tr, socket, err => {
 		if(err) {
-			console.error('errrrrorrr')
+			console.error(err)
 		}
-		clearInterval(interval)
+	})
+
+	finished(socket, err => {
+		if(err) {
+			console.error(err)
+		}
 	})
 }).listen(3000)

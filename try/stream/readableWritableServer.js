@@ -9,8 +9,7 @@ net.createServer((socket) => {
 		    socket.write(data.toString().toUpperCase())
 		  
 	})
-	  socket.on('end', () => { clearInterval(interval)  })
-	
+	socket.on('end', () => { clearInterval(interval)  })	
 }).listen(3000)
 
 
