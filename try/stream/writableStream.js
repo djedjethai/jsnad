@@ -31,7 +31,7 @@
 // const { Writable } = require('stream')
 // const createWriteStream = (data) => {
 // 	return new Writable({
-// 		decodeStrings: false,
+// 		decodeStrings: false, // i fell using objectMode: true, like it, it s same everywhere
 // 		write(chunk, enc, next) {
 // 			data.push(chunk)
 // 			next()

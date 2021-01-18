@@ -9,8 +9,9 @@ console.log(buf1) // <Buffer 63 61 6f 61 6c>
 console.log(buf1.toString()) // caoal
 
 // the .write()  method allow us to modify the content of the full buffer
-buf1.write('lili') // lilil !!! the last char is not replaced so stay the same as before...
-console.log(buf1.toString())
+buf1.write('lili') 
+console.log(buf1.toString()) // lilil !!! the last char is not replaced so stay the same as before.
+
 // let s try to modify with more bytes data
 buf1.write('roberta') // rober the size of the buffer can not be change
 console.log(buf1.toString())
@@ -48,26 +49,3 @@ catchphraseBuf.write('Not sure Turtle!'); // reset buff
 
 wordsBuf.copy(catchphraseBuf, 7, 0, wordsBuf.length);
 console.log(catchphraseBuf.toString()) // Not surBanana Na
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

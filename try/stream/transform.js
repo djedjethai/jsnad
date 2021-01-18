@@ -38,3 +38,11 @@ transform.write('C\n')
 transform.write('D\n')
 transform.end('nothing more to write')
 
+transform.on('finish', () => console.log('fffiinnniisshh')) // finish is emited before end
+transform.on('end', () => console.log('eeennnddd'))
+
+finished(transform, e => {
+	if(e) console.log(e)
+})
+
+

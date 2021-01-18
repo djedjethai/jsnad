@@ -39,3 +39,24 @@ writeFileSync(join(__dirname, 'todelete.txt'), contents.toUpperCase(), {
 
 // then restore the permission
 // node -e "fs.chmodSync('todelete.txt', 0o666)"
+
+// use fs.chmod() // async func 
+// for sync could use fs.chmodSync()
+const { chmod, readFileSync, writeFileSync } = require('fs')
+
+const dt = readFileSync(__filename, {encoding:'utf-8'})
+
+writeFileSync(require('path').join(__dirname,'todel.txt'), dt.toUpperCase(), {
+	flag:'a'
+})
+
+chmod('todel.txt', 0o000, (e) => { if(e) console.log(e) } )
+
+// If there's a problem with an operation the *Sync APIs will throw. So to perform error handling they need to be wrapped in a try/catch:
+try{
+	console.log(readFileSync('./todel.txt', 'utf-8'))
+} catch(e) {
+	console.log(e.code)
+}
+
+

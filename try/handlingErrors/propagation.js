@@ -127,4 +127,123 @@ try { run('j') } catch(e) { console.error(e) }
 // run(3).catch(e => console.error(e))
 
 
+//ex of propagation with call-back. INTERESSANT !!!
+const { pipeline } = require('stream')
+const { createGzip } = require('zlib')
+
+const gz = createGzip()
+
+const {
+	createReadStream,
+	createWriteStream
+} = require('fs')
+
+const rd = createReadStream('./unko')
+const sr = createWriteStream('./delete.gz')
+
+
+// try {
+function handler(cb) {
+pipeline(rd, gz, sr, e => {
+	if(e) {
+		const e = Error()
+		e.code = 'TEST_ERROR'
+		cb(e)
+	}
+})
+}
+
+// propage the err
+function runErr(rth) {
+	function cb(rt) {
+		rt.code = 'grrrrrrr'	
+		rth(rt)
+	}
+	handler(cb)
+}
+
+// seconde propagation of the err
+function rThrow(se) {
+	function cb2(r) {
+		r.code = 'aaaaah'
+		se(r)
+	}
+	runErr(cb2)
+}
+
+function showErr(e) {
+	console.log(e.code)
+}
+
+rThrow(showErr)
+
+
+
+// ONE MORE VERY INTERRESTING EXERCICE....
+function codify(err, code) {
+	err.code = code
+	return err
+}
+
+class MyErr extends Error {
+	constructor(varname = '') {
+		super(varname + 'is my err')
+		this.code = 'MY_ERROR'
+	}
+
+	get name() {
+		return 'My Err: ',this.code,''
+	}
+}
+
+
+
+const run = (n) => {
+	console.log(n)
+	if(typeof n !== 'number') { 
+		throw codify (
+		new TypeError('type err'),
+		'WRONG_TYPE'
+	)}
+	else if(n < 0) throw codify (
+		new RangeError('range err'),
+		'WRONG_RANGE'
+	)
+	else if(n % 2 !== 0) { throw codify (
+		new MyErr(),
+		'ANOTHER ERR'
+	)}
+	return n/2
+}
+
+// async/await PROMISIFY LA FUNCTION !!!! THEN AND ONLY THEN I CAN USE .catch()
+// otherwise(without async/await), i only can use try{}catch(e){}
+async function ooo(x) {
+	try {
+		await run(x)
+	}
+	catch(e){
+		if(e.code !== 'WRONG_TYPE') {
+			// throw Error('fdp')
+			throw codify(
+				new Error('la merde'),
+				'PROPAG'
+			)
+		}
+		else {
+			console.log('passed')
+			throw e
+		}
+	}
+}
+
+// try{
+// 	ooo('jhf')
+// } catch(e){
+// 	console.log(e.code)
+// }
+
+
+ooo(3).catch(e => console.log(e.code))
+
 
