@@ -4,7 +4,7 @@ const { join } = require('path')
 
 // // WORKS GREAT LIKE IT
 // const tr = new Transform({
-// 	encodeStrings:false,
+// 	decodeStrings:false, // useless
 // 	transform(chunk, enc, next){
 // 		next(null, chunk.toString().toUpperCase())
 // 	}

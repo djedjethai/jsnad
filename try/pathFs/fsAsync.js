@@ -46,3 +46,43 @@ async function better() {
 
 better().catch(console.error)
 
+// const { readFile } = require('fs')
+// readFile(__filename, 'utf-8', (e, d) => {
+// 	if (e) {
+// 		console.log(e)
+// 	}
+// 	else {
+// 		console.log('aaaa')
+// 		console.log(d)
+// 	}
+// })
+
+// async function as() {
+// 	try{
+// 		const re = await require('util').promisify(readFile)(__filename, 'utf-8')
+// 		console.log(re)
+// 	} catch(e) {
+// 		console.error(e)
+// 	}
+// }
+// as()
+
+
+const { readFile, writeFile } = require('fs').promises
+// async function pr() {
+// 	try{
+// 		// console.log(await readFile(__filename)) // return bytes data
+// 		const data = await readFile(__filename, 'utf-8')
+// 		await writeFile('out', data.toUpperCase()) // same as './out'
+// 	} catch(e) {
+// 		console.error(e)
+// 	}
+// }
+// pr()
+// SAME AS
+async function pr() {
+	const data = await readFile(__filename, 'utf-8')
+	await writeFile(out, data.toUpperCase()) // same as './out'
+}
+pr().catch(e => console.log(e))
+
