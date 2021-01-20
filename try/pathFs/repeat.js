@@ -1,36 +1,12 @@
-// const fs = require('fs')
-// const { opendir } = require('fs').promises
-// 
-// async function readDirStream() {
-// 	// const dir = await fs.promises.opendir(__dirname)
-// 	const dir = await opendir(__dirname)
-// 	for await (const dirent of dir) {
-// 		console.log(dirent.name)
-// 	}
-// } 
-// readDirStream().catch(e => console.error(e))
+'use strict'
 
-// let s have fun and return a file with the list as uppercase
-const fs = require('fs')
-const { Transform, pipeline, Readable } = require('stream')
+const { readdirSync, statSync } = require('fs')
 
-const streamUpper = () => {
-	return new Transform({
-		transform(chunk, enc, next) {
-			next(null, chunk.toString().toUpperCase())
-		}
-	})
+const files = readdirSync('.')
+
+for (const name of files) {
+	const stat = statSync(name)
+	const typeLabel = stat.isDirectory() ? 'dir: ' : 'file: '
+	console.log(typeLabel, name)
 }
 
-async function readDirStream() {
-	const dir = await fs.promises.opendir(__dirname)
-	
-	for await (const dirent of dir) {
-		await require('util').promisify(pipeline)(
-	 		Readable.from(dirent.name+'\n'),
-	 		streamUpper(),
-	 		fs.createWriteStream('./fileList.txt', {flags:'a'})
-	 	)	
-	}
-}
-readDirStream().catch(e => console.error(e))
