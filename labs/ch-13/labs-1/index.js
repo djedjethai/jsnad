@@ -47,11 +47,12 @@ function exercise (project) {
     try { 
       const filepath = join(project, filename)
       const stat = fs.statSync(filepath)
-
       // TODO - only set the answer variable if the filepath
       // is both newly created AND does not point to a directory
-
-      answer = filepath
+      if( (stat.birthtimeMs == stat.ctimeMs) && !stat.isDirectory())  {
+	  answer = filepath
+				
+      }	
     } catch (err) {
 
     } 
