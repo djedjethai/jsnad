@@ -115,3 +115,47 @@ try{
 	console.log(e.code)
 }
 
+// remove a file
+[jerome@thearch pathFs]$ node -e "fs.rm('testAsyc', e => e)"
+[jerome@thearch pathFs]$ node -e "fs.rmSync('grrr.txt')"
+
+
+
+
+// ========================= Change Group ========================
+[jerome@thearch pathFs]$ node -e "fs.fchown(fs.openSync('testAsyc'), 1000, 998, e => {if(e) console.log(e)})"
+[jerome@thearch pathFs]$ ls -l testAsyc 
+-rwxrwxrwx 1 jerome wheel 13 Jan 22 16:19 testAsyc
+[jerome@thearch pathFs]$ node -e "fs.fchown(fs.openSync('testAsyc'), 1000, 1000, e => {if(e) console.log(e)})"
+[jerome@thearch pathFs]$ ls -l testAsyc 
+-rwxrwxrwx 1 jerome jerome 13 Jan 22 16:19 testAsyc
+[jerome@thearch pathFs]$ 
+
+
+// ======================= shell commands =======================
+// get all systhem groups
+[jerome@thearch pathFs]$ cat /etc/group
+root:x:0:root
+sys:x:3:bin
+mem:x:8:
+ftp:x:11:
+mail:x:12:
+log:x:19:
+smmsp:x:25:
+proc:x:26:pol
+
+// get permission, user and group of a file
+[jerome@thearch pathFs]$ ls -l testAsyc 
+-rwxrwxrwx 1 jerome jerome 13 Jan 22 16:19 testAsyc
+// of a dir
+[jerome@thearch pathFs]$ ls -ld dirAsync
+d--x--x--x 2 jerome jerome 4096 Jan 22 16:21 dirAsync
+// print info about specified user ans its group
+[jerome@thearch pathFs]$ id
+uid=1000(jerome) gid=1000(jerome) groups=1000(jerome),998(wheel)
+[jerome@thearch pathFs]$ id jerome
+uid=1000(jerome) gid=1000(jerome) groups=1000(jerome),998(wheel)
+// get group of current user
+[jerome@thearch pathFs]$ id -nG
+jerome wheel
+
