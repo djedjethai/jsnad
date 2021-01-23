@@ -1,4 +1,4 @@
-const { statSync, stat, fstat, readFileSync, openSync } = require('fs')
+// const { statSync, stat, fstat, readFileSync, openSync } = require('fs')
 const { join, resolve } = require('path')
 
 
@@ -40,14 +40,14 @@ const { join, resolve } = require('path')
 
 
 
-function getPr() {
-	return new Promise((resolve, reject) => {
-		stat('watch.js', (e, data) => {
-			if (e) reject(e)
-			else resolve(data)
-		})
-	})
-}
+// function getPr() {
+// 	return new Promise((resolve, reject) => {
+// 		stat('watch.js', (e, data) => {
+// 			if (e) reject(e)
+// 			else resolve(data)
+// 		})
+// 	})
+// }
 // getPr()
 // 	.then(d => console.log(d.birthtime)) 
 // 	.catch(console.error)// ok
@@ -70,6 +70,38 @@ function getPr() {
 // console.log(st.mtime)
 // DO NOT WORKKKKKK
 
+// ==================== with promisify ====================
+const { promisify } = require('util')
+// const prom = promisify((cb) => { 
+// 	const print = (e, d) => {
+// 		if(e) {
+// 			cb(e, null)
+// 			return
+// 		}
+// 		cb(null, d)
+// 	}
+// 	stat('watch.js', print)
+// })		
 
-const prom = require('util').promisify()() // a finir....
+// or HEREEEE same previously but  much simpler
+// const prom = promisify((cb) => stat('watche.js', cb))
 
+// prom().then(d => console.log('ddd: ',d.birthtime)).catch(e => console.log('errr: ', e.code))
+
+// or with async await
+// async function as() {
+// 	try{
+// 		const aa = await prom()
+// 		console.log('async/aw: ', aa.ctime)
+// 	} catch(e) {
+// 		console.error(e)
+// 	}
+// }
+// as()
+
+// ==================== with fs.promises ====================
+const { stat } = require('fs').promises
+
+const prom = stat('watch.js')
+
+prom.then(d => console.log('ddd: ',d.birthtime)).catch(e => console.log('errr: ', e.code))

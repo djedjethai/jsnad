@@ -124,3 +124,24 @@ as()
 // 		})
 // 	})
 // })
+
+// =================== Extra Async an heavy computation (using promise) =================
+function getPr() {
+	return new Promise((resolve, reject) => {
+		for (let i = 0; i < 1000000; i++) {
+			i++
+			if(i === 999999) resolve('loop done')
+		}
+		reject('err ds unfinished')
+	})
+}
+
+console.log('start')
+getPr()
+	.then(d => console.log(d)) 
+	.catch(e => console.log(e))
+
+console.log('start1')
+console.log('start2')
+console.log('start3')
+
