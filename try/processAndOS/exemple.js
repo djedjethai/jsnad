@@ -1,22 +1,3 @@
-// If we attempt to use the command line to pipe the output from the random byte command into our process, nothing will happen beyond the process printing that it was initialized:
-
-[jerome@thearch processAndOS]$ node -p "crypto.randomBytes(100).toString('hex')" | node exemple.js
-initialised
-
-// ===========================
-
-'use strict'
-const { pipeline } = require('stream')
-
-
-console.log('initialised')
-process.stdin.pipe(process.stdout)
-
-[jerome@thearch processAndOS]$ node -p "crypto.randomBytes(100).toString('hex')" | node exemple.js
-initialised
-0dbadf3f10133972c50c3c8961f5240e52c81dcb92ca973b2083e4ed102f1970d7ec4e87205532ac452d342cbbb0746f6f4c2a4b9a794508e07967a84e537ec6bd2fe696ed60d899fa018bbde7111ef99868c9449278dabc583945c1dda29ccced71dcbf
-[jerome@thearch processAndOS]$ 
-
 'use strict'
 const { pipeline, Transform } = require('stream')
 
