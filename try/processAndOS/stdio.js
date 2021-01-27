@@ -51,3 +51,45 @@ console.log(process.stdin.isTTY ? 'Terminal\n' : 'Is pipe\n')
 // [jerome@thearch processAndOS]$
 
 // This command wrote STDOUT to out.txt and STDERR to err.txt. On both Windows and POSIX systems (Linux, macOS) the number 2 is a common file handle representing STDERR, this is why the syntax is 2>
+
+
+// ---------------- implement for understanding my own stdout and err -------------
+const fs = require('fs')
+
+const mySTDOUT = fs.createWriteStream(null, {fd:1})
+const mySTDERR = fs.createWriteStream(null, {fd:2})
+
+mySTDOUT.write('stdout stream\n')
+mySTDERR.write('stderr stream\n')
+
+[jerome@thearch processAndOS]$ node repeat.js
+stdout stream
+stderr stream
+[jerome@thearch processAndOS]$ node repeat.js > out.txt
+stderr stream
+[jerome@thearch processAndOS]$ node repeat.js > out.txt 2> err.txt
+[jerome@thearch processAndOS]$ cat out.txt
+stdout stream
+[jerome@thearch processAndOS]$ cat err.txt
+stderr stream
+
+// ----------- i try that ---------------
+const mySTDOUT = fs.createWriteStream(null, {fd:1})
+const mySTDERR = fs.createWriteStream(null, {fd:2})
+const mySTDGG = fs.createWriteStream(null, {fd: 1}) // if i change to {fd: 3} // err core dumped
+
+mySTDOUT.write('stdout stream\n')
+mySTDERR.write('stderr stream\n')
+mySTDGG.write('stdGG stream\n')
+
+[jerome@thearch processAndOS]$ node repeat.js 
+stdout stream
+stderr stream
+stdGG stream
+[jerome@thearch processAndOS]$ node repeat.js > out.txt
+stderr stream
+[jerome@thearch processAndOS]$ cat out.txt 
+stdout stream
+stdGG stream
+[jerome@thearch processAndOS]$ 
+
