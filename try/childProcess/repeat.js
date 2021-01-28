@@ -1,9 +1,7 @@
-const { execSync } = require('child_process')
+const { spawn } = require('child_process')
 
-const output = execSync(
-	`node -e "console.log('subprocess stdio output')"`
-	// `ls -l`
-	// `cat repeat.js`
-)
+process.env.A_VAR_WE='JUST SET'
+const sp = spawn(process.execPath, [`-p`, `process.env`])
+sp.stdout.pipe(process.stdout)
 
-console.log(output.toString())
+
