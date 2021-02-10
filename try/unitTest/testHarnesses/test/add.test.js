@@ -41,7 +41,7 @@ test('adds two numbers', async () => {
 })
 
 // here we can not run our test with node. 
-// means that there one more layer between the tests and the code (not good)
+// means that there is one more layer between the tests and the code (not good)
 // the test must be run with the Jest binary
 // install jest first: npm i --save-dev jest
 // [jerome@thearch testHarnesses]$ ./node_modules/.bin/jest test/add.test.js 
