@@ -30,6 +30,8 @@ function runErr(d) {
 	// }
 }
 
+// that works. as the err will be delayed, it won t be catch
+// here is a work around using async/await and setTimeout() 
 const timeout = require('util').promisify(setTimeout)
 ;(async () => {
 	try{
@@ -48,3 +50,42 @@ const timeout = require('util').promisify(setTimeout)
  		errHandler(e)
 	}
 })()
+
+// ============== another try ==================
+// a finir, i don t know if really util
+
+const { createReadStream } = require('fs')
+const { Transform, pipeline } = require('stream')
+// const { StringDecoder } = require('string_decoder');
+
+// transform stream into buffer
+function objectifyStream() {
+    return new Transform({
+        objectMode: true,
+        transform: function(chunk, encoding, next) {
+
+            if (!buffer) {
+                buffer = Buffer.from([...chunk]);
+            } else {
+                buffer = Buffer.from([...buffer, ...chunk]);
+            }
+            next(null, buffer);
+        }
+    });
+}
+
+
+const d = createReadStream('jhgf.cv')
+
+d.on('error', () => console.log('errrrrrr'))
+
+d.on('readable', () => {
+        console.log(d.read().toString())
+})
+
+d.on('end', () => {
+        console.log('ennnnddd')
+})
+
+
+

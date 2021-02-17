@@ -125,6 +125,57 @@ as()
 // 	})
 // })
 
+// using Promise.All() && Promise.AllSettled() 
+const { promisify } = require('util')
+
+const opA = (cb) => {
+  setTimeout(() => {
+    cb(null, 'A')
+  }, 500)
+}
+
+const opB = (cb) => {
+  setTimeout(() => {
+    cb(null, 'B')
+  }, 250)
+}
+
+const opC = (cb) => {
+  setTimeout(() => {
+    cb(null, 'C')
+  }, 125)
+}
+
+const resu = (d) => {
+	d
+		.filter(({status}) => status === 'rejected')
+		.forEach(({reason}) => console.error("error: ", reason))
+	
+	const data = d
+		.filter(({status}) => status === 'fulfilled')
+		.map(({value}) => value)
+
+	return data
+}
+
+const a = promisify(opA)
+const b = promisify(opB)
+const c = promisify(opC)
+
+const arr = [a(), b(), c()]
+
+// crash if any err as no err catch
+const res = Promise.all(arr)
+res.then(r => console.log(r))
+
+// does not crash, nicely return only the promise wich resolved
+// const res = Promise.allSettled(arr)
+// res.then(r => console.log(resu(r)))
+
+
+
+
+
 // =================== Extra Async an heavy computation (using promise) =================
 function getPr() {
 	return new Promise((resolve, reject) => {
