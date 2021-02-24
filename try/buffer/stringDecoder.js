@@ -7,8 +7,23 @@ const frag2 = Buffer.from('9180', 'hex')
 console.log(frag1.toString()) // �
 console.log(frag2.toString()) // ��
 
+
 const decoder = new StringDecoder()
 // same as const decoder = new StringDecoder('utf8')
+
+// !!!!!!!! decoder will only encode from binary to utf8 
+// so if base64 to encode to 'utf8', need to pass trough binary first
+// ex:
+// line var is a binary stream/buffer
+// for the ex, we transform it to base64 encoding
+// on base64 encoding decoder.write(arg) doen not work
+let arg = Buffer.from(line).toString('base64')
+// so let transform back arg from base64 to binary
+arg = Buffer.from(arg, 'base64')
+// arg is encoded to utf8. it works
+console.log(decoder.write(arg))
+
+
 console.log(decoder.write(frag1)) // empty
 console.log(decoder.write(frag2)) // 👀
 

@@ -51,6 +51,34 @@ const timeout = require('util').promisify(setTimeout)
 	}
 })()
 
+// ====================== INTERRESTING =======================
+
+const timeout = require('util').promisify(setTimeout)
+async function handleErrAndAsyncReq(d) {
+	if(typeof d !== 'number' ) throw codify(new TypeError('must be number'), 'MUST_BE_NUMBER')
+	if(d < 0) throw codify(new RangeError('input must be positif'), 'MUST_BE_POSITIF')
+	if(d % 2 !== 0) throw codify(new OddError('the input'), 'MUST_BE_EVEN')
+
+	// simulate async exec
+	await timeout(1000)
+	console.log(d / 2)
+}
+
+// works
+// stangeErr(-3).catch(e => console.log('grrr: ', e))
+
+// but to use try/catch i need to wrap in an async/await func
+async function gr() {
+try { 
+ await handleErrAndAsyncReq(-3)
+} catch(e) { console.error('catched: ', e) }
+}
+gr()
+
+
+
+
+
 // ============== another try ==================
 // a finir, i don t know if really util
 

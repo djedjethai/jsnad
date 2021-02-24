@@ -49,3 +49,17 @@ catchphraseBuf.write('Not sure Turtle!'); // reset buff
 
 wordsBuf.copy(catchphraseBuf, 7, 0, wordsBuf.length);
 console.log(catchphraseBuf.toString()) // Not surBanana Na
+
+// =============== Extra fun, convert data from stringify s3 bucket to string ==============
+// I am receiving data reading from an S3 bucket, which will contain .html files. they are being received by Node like so:
+// my solution
+const d = {"type":"Buffer","data":[60,104,116,109,108,32,120,109,108,110,115,58,118,61,34,117,114]};
+const r =  Buffer.from(d.data).toString()
+console.log(r)
+
+// another guy solution
+const dataFromS3 = {"type":"Buffer","data":[60,104,116,109,108,32,120,109,108,110,115,58,118,61,34,117,114]};
+
+const output = String.fromCharCode.apply(null, new Uint16Array(dataFromS3.data));
+console.log(output);
+

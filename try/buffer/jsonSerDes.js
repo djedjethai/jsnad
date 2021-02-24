@@ -30,4 +30,40 @@ const jsParsed = JSON.parse(json)
 console.log(jsParsed) // { type: 'Buffer', data: [ 240, 157, 144, 128 ] }
 console.log(Buffer.from(jsParsed)) // <Buffer f0 9d 90 80>
 
+// An exemple
+// decode a string to binary
+> bin = Buffer.from('oulalalalala')
+<Buffer 6f 75 6c 61 6c 61 6c 61 6c 61 6c 61>
+// stringify the binary
+// that create a json object with a "type" and "data" key
+// the value of the "data" are the binaries 
+> jsstr = JSON.stringify(bin)
+'{"type":"Buffer","data":[111,117,108,97,108,97,108,97,108,97,108,97]}'
+// as we parse the jsstr stringified json object
+// we get back a javascript object
+> JSON.parse(jsstr)
+{
+  type: 'Buffer',
+  data: [
+    111, 117, 108,  97, 108,
+     97, 108,  97, 108,  97,
+    108,  97
+  ]
+}
+// decode the js object to binary
+// OR only the value of the "data" key, the result is the same
+// then apply .toString() (underlying 'utf8'), that return back the string....
+> Buffer.from(JSON.parse(jsstr).data).toString('utf8')
+'oulalalalala'
+> Buffer.from(JSON.parse(jsstr)).toString('utf8')
+'oulalalalala'
+
+// ex 2 refactored
+> a = JSON.stringify(Buffer.from('sabsone'))
+'{"type":"Buffer","data":[115,97,98,115,111,110,101]}'
+> a
+'{"type":"Buffer","data":[115,97,98,115,111,110,101]}'
+> Buffer.from(JSON.parse(a).data).toString()
+'sabsone'
+> 
 

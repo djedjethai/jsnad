@@ -106,6 +106,29 @@ jerome@jerome-PORTEGE-M900 ~ $ node -p "Buffer.from('8J+RgA==', 'base64')"
 jerome@jerome-PORTEGE-M900 ~ $ node -p "Buffer.from('\u{1D400}')"
 <Buffer f0 9d 90 80>
 
+
+// VERY SIMPLE !!!!
+// two type of encoding: 
+// Character encoding == utf8 and utf16le
+// Binary to text encoding == base64 and hex
+// so 3 types: binary, Char encoding and bin to text encoding
+
+// create from a string utf8 a binary
+> Buffer.from('𝐀')
+<Buffer f0 9d 90 80>
+// create from the same string a base64
+> Buffer.from('𝐀').toString('base64')
+'8J2QgA=='
+
+//create from a base64 a binary
+> Buffer.from('8J2QgA==', 'base64')
+<Buffer f0 9d 90 80>
+// create from a base64 a string utf8 encoding (.toString() == .toString('utf8'))
+> Buffer.from('8J2QgA==', 'base64').toString()
+'𝐀'
+
+
+
 // my ex
 //'\u{1D400}' is the A with special font with UTF-8 encoding
 // here i tramsfome it into 'string base64 encoding' 

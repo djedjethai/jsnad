@@ -45,4 +45,54 @@ finished(transform, e => {
 	if(e) console.log(e)
 })
 
+// =========================== my try ==============================
+
+// here is the client
+const { connect } = require('net')
+const { pipeline } = require('stream')
+const { createReadStream, createWriteStream } = require('fs')
+const { join } = require('path')
+
+const socket = connect(3000)
+
+
+pipeline(createReadStream(__filename), socket, e => console.error('read: ', e))
+
+
+pipeline(socket, createWriteStream(join(__dirname, 'out.txt')), e => console.error('to write: ', e))
+
+// here is the server
+const { createReadStream, createWriteStream } =require('fs')
+const { join } = require('path')
+const { pipeline, Readable, Writable, Transform } = require('stream')
+const { createServer } = require('net')
+
+
+const td = (data) => {
+	return new Transform({
+		transform(chunk, enc, next)  {
+			const d = chunk.toString().toUpperCase()
+			next(null, d)
+		}
+	})
+}
+
+
+// createReadStream(__filename).pipe(t).pipe(createWriteStream(join(__dirname,'out.txt'), 'utf8'))
+
+createServer((socket) => {
+
+
+const t = td()
+
+// we transform any incomming streams and send them back
+pipeline(socket, t, socket, e => console.error('err from serv: ', e))
+
+
+}).listen(3000)
+
+
+// pipeline(createReadStream(__filename), t, createWriteStream(join(__dirname,'out.txt')), e => {
+// 	if(e) console.error('the error: ', e)
+// })
 
