@@ -1,49 +1,19 @@
-const { pipeline, Transform, Readable } = require('stream')
-const http = require('http')
-const fs = require('fs')
+const { opendir, statSync, readdirSync, readdir } = require('fs')
 
-// const createTransform = () => {
-//   let syntax = '[\n'
-//   return new Transform({
-//     writableObjectMode: true,
-//     readableObjectMode: false,
-//     transform (entry, enc, next) {
-//       next(null, `${syntax} "${entry.name}"`)
-//       syntax = ',\n'
-//     }
-//     ,
-//     final (cb) {
-//       this.push('\n]\n')
-//       cb()
-//     }
-//   })	
-// }
+opendir(__dirname, async(e,d) => {
+	for await( const Dirent of d) {
+		console.log(Dirent.name)
+		const stat = statSync(Dirent.name)
+		console.log(stat.isDirectory() ? `${Dirent.name} is a directory` : `${Dirent.name} is not a dierectory`)
+		console.log(stat)
+	}
+})
 
-const createTransform = () => {
-        return new Transform({
-		readableObjectMode: false,
-		writableObjectMode: true,
-                transform(chunk, enc, next) {
-                	let syntax = '\n'
-                        next(null, `${syntax} ${chunk.name.toUpperCase()}`)
-		}
-        })  
-}
- 
-async function readDirStream() {
-        const dir = await fs.promises.opendir(__dirname)
-	// const rd = Readable.from(dir)
+// const files = readdirSync('.')
+// console.log(files)
 
-	// that is good
-	pipeline(dir, createTransform(), fs.createWriteStream('newfile.txt', {flags: 'a'}), e => console.error("from piprline: ", e) )
+// readdir(__dirname, (e,d) => {
+// 	console.log(d)
+// })
 
-	// my first found, it s sucks........
-        // for await (const dirent of dir) {
-        //         await require('util').promisify(pipeline)(
-        //                 // Readable.from(dirent.name+'\n'),
-        //                 streamUpper(),
-        //                 fs.createWriteStream('./fileList.txt', {flags:'a'})
-        //         )           
-        // }   
-}
-readDirStream().catch(e => console.error(e))
+

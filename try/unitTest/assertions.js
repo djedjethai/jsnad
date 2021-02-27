@@ -85,3 +85,78 @@ assert.doesNotReject(pseudoReq('http://exemple.com'))
 assert.rejects(pseudoReq('http://error.com'), Error('network error'))
 // Recall that async functions always return promises. So we converted our previously callback-based faux-request API to an async function. We can then use assert.reject and assert.doesNotReject to test the success case and the error case. One caveat with these assertions is that they also return promises, so in the case of an assertion error a promise will reject with an AssertionError rather than AssertionError being thrown as an exception.
 
+
+// ================== assert some streams ====================
+// code
+const fs = require('fs')
+const { pipeline, Transform, Readable } = require('stream')
+
+const createUppercase = () => {
+	return new Transform({
+		objectMode: true,
+		transform(chunk, enc, next) {
+			// console.log(chunk)
+			next(null, chunk.name.toUpperCase())
+		}
+	})
+}
+
+const createReverse = () => {
+	return new Transform({
+		objectMode: true,
+		transform(chunk, enc, next) {
+			// console.log(chunk)
+			next(null, chunk.name.split("").reverse().join(""))
+		}
+	})
+}
+
+module.exports = { createUppercase, createReverse }
+
+
+// fs.readdir(__dirname, (e,d) => {
+// 	console.log(d)
+// })
+
+// transform to upper
+const cu = createUppercase()
+fs.opendir(__dirname, (e,d) => {
+	pipeline(d, cu, e => console.error("pipe error first: ", e))
+})
+cu.on('data', d => console.log(d))
+
+// reverse 
+const cr = createReverse()
+fs.opendir(__dirname, (e,d) => {
+	pipeline(d, cr, e => console.error("pipe error second: ", e))
+})
+cr.on('data', d => console.log(d))
+
+// from a test file import the previous code and test the transform streams
+const { pipeline, Readable } = require('stream')
+const assert = require('assert')
+
+const { createUppercase, createReverse } = require('./repeat')
+
+const test = createUppercase()
+const t = Readable.from([{name:'aaa'}, {name:'bbb'}])
+t.pipe(test)
+test.once('data', d => {
+	assert.equal(d, 'AAA')
+	test.once('data', d => {
+		assert.equal(d, 'BBB')
+		console.log('test upper passed')
+	})
+})
+
+const testR = createReverse()
+const rr = Readable.from([{name:'qwerty'}, {name: 'asdfgh'}])
+rr.pipe(testR)
+testR.once('data', d => {
+	assert.strictEqual(d, 'ytrewq')
+	testR.once('data', d => {
+		assert.strictEqual(d, 'hgfdsa')
+		console.log('test reverse passed')
+	})
+})
+

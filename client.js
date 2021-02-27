@@ -1,40 +1,29 @@
-const { connect } =require('net')
-const { Writable, finished, Transform, pipeline } =require('stream')
-const { EventEmitter } = require('events')
-
-const getDataOutOfSocket = new EventEmitter()
-
-const data = []
-const createTransform = (data) => {
-	return new Transform({
-		readableObjectMode: true,
-		writableObjectMode: false,
-		transform(chunk, enc, next) {
-			if(chunk)  {
-				const res = JSON.parse(chunk)		
-				data.push(res)
-				next(null, data)
-			}
-		}
-	})
-} 
-
-
-function gd() {
-	console.log(data)
-	console.log('carry on logique')
+const { Transform, Readable } = require('stream')
+const assert = require('assert').strict
+const streamUpper = () => {
+  return new Transform({
+    objectMode: true,
+    // readableObjectMode: true,
+    // writableObjectMode: false,
+    transform(chunk, enc, next) {
+	    console.log(chunk.toString().toUpperCase())
+        next(null, chunk.toString().toUpperCase())
+    }   
+  })
 }
 
-getDataOutOfSocket.on('getData', gd)
 
-const socket = connect(3000)
 
-const cw = createTransform(data)
+const upper = streamUpper()
+Readable.from(['aaaa', 'bbbb']).pipe(upper)
 
-pipeline(socket, cw, e => console.log(e))
 
-finished(socket, (e) => {
-	console.error('end of connection or err: ', e)
-	getDataOutOfSocket.emit('getData')
+upper.once('data', d => {
+	console.log(d)
+	assert.strictEqual(d, 'AAAA')
+	upper.once('data', da => {
+		assert.equal(da, 'BBBB')
+		console.log('passed')
+	})
 })
 
